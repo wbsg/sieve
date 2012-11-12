@@ -515,7 +515,7 @@ The directory <code>sieve</code> contains configuration for quality assessment a
 We will assign higher reputation to data coming from the English Wikipedia (because it is the largest and most viewed), followed by the Portuguese (because it's the most relevant for the use case), Spanish, French and German (in subjective order of language similarity to Portuguese).
 Recency will be measured by looking at the <code>lastUpdated</code> property, which was extracted from Wikipedia Dumps.
 <pre>
-&lt;Sieve xmlns="http://ldif.wbsg.de/"&gt;
+&lt;Sieve xmlns="http://www4.wiwiss.fu-berlin.de/ldif/"&gt;
     &lt;Prefixes&gt;
         &lt;Prefix id="dbpedia-owl" namespace="http://dbpedia.org/ontology/"/&gt;
         &lt;Prefix id="dbpedia" namespace="http://dbpedia.org/resource/"/&gt;
@@ -577,16 +577,16 @@ Some example data for fused properties:
 <p>
 If you choose to output quality scores, then you should also notice many triples assigned to your graph URIs, like this:
 <pre>
-&lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.4010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://pt.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "1.0000"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://fr.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.2010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://de.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.0010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.6010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://de.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9956"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9955"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9648"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://fr.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9956"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
-&lt;http://pt.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9953"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://ldif.wbsg.de/provenance&gt; .
+&lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.4010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://pt.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "1.0000"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://fr.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.2010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://de.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.0010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.6010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://de.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9956"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9955"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9648"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://fr.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9956"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://pt.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9953"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
 </pre>
 </p>
 
