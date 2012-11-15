@@ -330,9 +330,9 @@ is described by this <a href="http://www.assembla.com/code/ldif/git/node/blob/ma
   &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org http://es.wikipedia.org"/&gt;
 &lt;/ScoringFunction&gt;
 </pre>
-      Example output: {http://en.wikipedia.org=1, http://pt.wikipedia.org=0.75, http://de.wikipedia.org=05, http://es.wikipedia.org=0.25, http://fr.wikipedia.org=0}</li>
+      Example output: {http://en.wikipedia.org=1, http://pt.wikipedia.org=0.75, http://de.wikipedia.org=0.5, http://es.wikipedia.org=0.25, http://fr.wikipedia.org=0}</li>
   </li>
-  <li><i>ScoredPrefixList</i>: assigns decreasing, uniformly distributed, real values to each graph URI that matches a provided (as space-separated list) prefix. 
+  <li><i>ScoredPrefixList</i>: assigns decreasing, uniformly distributed, real values to each graph URI that matches one of the provided (as space-separated list) prefixes. 
       Example input: 
 <pre>
 &lt;ScoringFunction class="ScoredPrefixList"&gt;
@@ -397,8 +397,8 @@ object ScoringFunction {
 <pre>
 enwiki:Juiz_de_Fora sieve:recency "0.4" ldif:provenance .
 ptwiki:Juiz_de_Fora sieve:recency "0.8" ldif:provenance .
-enwiki:Juiz_de_Fora sieve:reputation "0.9" ldif:provenance .
-ptwiki:Juiz_de_Fora sieve:reputation "0.45" ldif:provenance .
+enwiki:Juiz_de_Fora sieve:reputation "0.75" ldif:provenance .
+ptwiki:Juiz_de_Fora sieve:reputation "0.25" ldif:provenance .
 </pre>
 
 
@@ -545,7 +545,7 @@ Recency will be measured by looking at the <code>lastUpdated</code> property, wh
 
         &lt;AssessmentMetric id="sieve:reputation"&gt;
             &lt;ScoringFunction class="ScoredList"&gt;
-                &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://es.wikipedia.org http://fr.wikipedia.org http://de.wikipedia.org"/&gt;
+                &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://es.wikipedia.org http://fr.wikipedia.org"/&gt;
             &lt;/ScoringFunction&gt;
         &lt;/AssessmentMetric&gt;
 
@@ -588,11 +588,10 @@ Some example data for fused properties:
 <p>
 If you choose to output quality scores, then you should also notice many triples assigned to your graph URIs, like this:
 <pre>
-&lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.4010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
-&lt;http://pt.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "1.0000"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
-&lt;http://fr.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.2010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
-&lt;http://de.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.0010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
-&lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.6010"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.5"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://pt.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.75"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://fr.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "0.25"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
+&lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/reputation&gt; "1.0"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
 &lt;http://de.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9956"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
 &lt;http://en.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9955"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
 &lt;http://es.wikipedia.org/wiki/Rio_de_Janeiro&gt; &lt;http://sieve.wbsg.de/vocab/recency&gt; "0.9648"^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; &lt;http://www4.wiwiss.fu-berlin.de/ldif/provenance&gt; .
