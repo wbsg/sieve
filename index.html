@@ -164,8 +164,9 @@
 
 <h2 id="news">News</h2>
   <ul>
+  <li><strong>14/11/2012: Sieve new version released with  <a href="http://ldif.wbsg.de/">LDIF 0.5.1</a>, including various bugfixes. </strong>  
   <li><strong>12/08/2012: Bugfixes; Additional Functions; Quality Assessment and Data Fusion modules integrated with the LOD2 Stack. </strong>
-  <li><strong>03/04/2012: First implementation included in <a href="http://ldif.wbsg.de/">LDIF v0.5</a>.</strong> <!-- http://lists.w3.org/Archives/Public/public-lod/2012Apr/0041.html -->
+  <li><strong>03/04/2012: First implementation included in <a href="http://ldif.wbsg.de/">LDIF 0.5</a>.</strong> <!-- http://lists.w3.org/Archives/Public/public-lod/2012Apr/0041.html -->
   <li><strong>30/03/2012: Paper about Sieve presented at the LWDM workshop at EDBT'12.</strong> [ <a href="http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/research/publications/Mendes-Muehleisen-Bizer-Sieve-LWDM2012.pdf">pdf</a> ] [ <a href="http://www.slideshare.net/pablomendes/lwdm2012-sieveslideshare">slides</a> ]
   <li><strong>29/02/2012: Conceptual design and implementation of metrics released.</strong>
 </ul>
@@ -314,7 +315,7 @@ is described by this <a href="http://www.assembla.com/code/ldif/git/node/blob/ma
 <ul>
   <li><i>TimeCloseness</i>: measures the distance from the input date (obtained from the input metadata through a path expression) to the current (system) date. Dates outside the range (informed in number of days) receive value 0, and dates that are more recent receive values closer to 1. Example input:
 <pre>
-&lt;ScoringFunction name="TimeCloseness"&gt;
+&lt;ScoringFunction class="TimeCloseness"&gt;
   &lt;Param name="range" value="7"/&gt;
   &lt;Input path="?GRAPH/ldif:lastUpdate"/&gt;
 &lt;/ScoringFunction&gt;
@@ -322,16 +323,25 @@ is described by this <a href="http://www.assembla.com/code/ldif/git/node/blob/ma
       Example output: 0.85 (assuming the last update was yesterday).
       <br/>TimeCloseness can be used for indicators such as freshness (last updated) and recency (creation date).
   </li>
-  <li><i>Preference</i>: assigns decreasing, uniformly distributed, real values to each graph URI provided as space-separated list. 
+  <li><i>ScoredList</i>: assigns decreasing, uniformly distributed, real values to each graph URI provided as space-separated list. 
       Example input: 
 <pre>
-&lt;ScoringFunction name="Preference"&gt;
-  &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://es.wikipedia.org"/&gt;
+&lt;ScoringFunction class="ScoredList"&gt;
+  &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org http://es.wikipedia.org"/&gt;
 &lt;/ScoringFunction&gt;
 </pre>
-      Example output: {en.wikipedia.org=0.9, pt.wikipedia.org=0.6, es.wikipedia.org=0.3}</li>
-</li>
-  <li><i>SetMembership</i>: assigns 1 if the value of the indicator provided as input belongs to the set informed as parameter, 0 otherwise.</li>
+      Example output: {http://en.wikipedia.org=1, http://pt.wikipedia.org=0.75, http://de.wikipedia.org=05, http://es.wikipedia.org=0.25, http://fr.wikipedia.org=0}</li>
+  </li>
+  <li><i>ScoredPrefixList</i>: assigns decreasing, uniformly distributed, real values to each graph URI that matches a provided (as space-separated list) prefix. 
+      Example input: 
+<pre>
+&lt;ScoringFunction class="ScoredPrefixList"&gt;
+  &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org  http://es.wikipedia.org"/&gt;
+&lt;/ScoringFunction&gt;
+</pre>
+      Example output: {http://en.wikipedia.org/wiki/Berlin=1, http://pt.wikipedia.org/wiki/Berlin=0.75, http://de.wikipedia.org/wiki/Berlin=0.5, http://es.wikipedia.org/wiki/Berlin=0.25, http://fr.wikipedia.org/wiki/Berlin=0}</li>
+  </li>
+  <!--li><i>SetMembership</i>: assigns 1 if the value of the indicator provided as input belongs to the set informed as parameter, 0 otherwise.</li-->
   <li><i>Threshold</i>: assigns 1 if the value of the indicator provided as input is higher than a threshold informed as parameter, 0 otherwise.
 <pre>
 &lt;ScoringFunction class="Threshold"&gt;
@@ -341,9 +351,9 @@ is described by this <a href="http://www.assembla.com/code/ldif/git/node/blob/ma
 </pre>
       Example output: {http://en.wikipedia.org/wiki/DBpedia=1, http://pt.wikipedia.org/wiki/DBpedia=0}
   </li>
-  <li><i>IntervalMembership</i>: assigns 1 if the value of the indicator provided as input is within the interval informed as parameter, 0 otherwise.
+  <li><i>Interval</i>: assigns 1 if the value of the indicator provided as input is within the interval informed as parameter, 0 otherwise.
 <pre>
-&lt;ScoringFunction class="IntervalMembership"&gt;
+&lt;ScoringFunction class="Interval"&gt;
   &lt;Param name="from" value="6"/&gt;
   &lt;Param name="to" value="42"/&gt;
   &lt;Input path="?GRAPH/provenance:whatever"/&gt;
@@ -466,12 +476,12 @@ object FusionFunction {
  &lt;/FusionFunction&gt;
 </pre> 
   </li>
-  <li><i>KeepSingleValueByQualityScore or KeepFirst</i>: keeps the value with the highest value for a given quality assessment metric. In case of ties, the function keeps the first in order of input.
+  <li><i>KeepFirst</i>: keeps the value with the highest value for a given quality assessment metric. In case of ties, the function keeps the first in order of input.
 <pre>
- &ltFusionFunction class="KeepSingleValueByQualityScore" metric="sieve:reputation"/&gt;
+ &ltFusionFunction class="KeepFirst" metric="sieve:reputation"/&gt;
 </pre> 
  </li>
- <li><i>KeepAllValuesByQualityScore</i>: similar to KeepSingleValueByQualityScore, but in case of ties, it keeps all values with the highest score.</li>
+ <li><i>KeepAllValuesByQualityScore</i>: similar to <i>KeepFirst</i>, but in case of ties, it keeps all values with the highest score.</li>
  <li><i>Average</i>: takes the average of all input data for a given property.</li>
  <li><i>Voting</i>: picks the value that appeared most frequently across sources. Each named graph has one vote, the most voted value is chosen.</li>
  <li><i>WeightedVoting</i>: picks the value that appeared most frequently across highly rated sources. Each named graph has one vote proportional to its score for a given quality metric, the value with highest aggregated scores is chosen.</li>
@@ -486,8 +496,8 @@ object FusionFunction {
 <p>
 Here is how you can run this example:
   <ol>
-    <li><a href="https://github.com/downloads/wbsg/ldif/ldif-0.5.zip">download</a> the latest release</li>
-    <li>unpack the archive and change into the extracted directory <code>ldif-0.5</code></li>
+    <li><a href="https://github.com/downloads/wbsg/ldif/ldif-0.5.1.zip">download</a> the latest release</li>
+    <li>unpack the archive and change into the extracted directory <code>ldif-0.5.1</code></li>
     <li>to run this example:
         <ul>
             <li>under Linux / Mac OS type:<pre>bin/ldif examples/lwdm2012/schedulerConfig.xml</pre></li>
@@ -523,7 +533,8 @@ Recency will be measured by looking at the <code>lastUpdated</code> property, wh
     &lt;/Prefixes&gt;
 
     &lt;QualityAssessment name="Recent and Reputable is Best"
-                       description=""&gt;
+                       description="The idea that more recent articles from Wikipedia could capture better values that change over time (recency),
+                       while if there is a conflict between two Wikipedias, trust the one which is more likely to have the right answer (reputation)."&gt;
 
         &lt;AssessmentMetric id="sieve:recency"&gt;
             &lt;ScoringFunction class="TimeCloseness"&gt;
