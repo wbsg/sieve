@@ -156,13 +156,16 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
 
 <pre>
 &lt;QualityAssessment name="Recent and Reputable is Best"
-                   description="The idea that more recent articles from Wikipedia could capture better values that change over time (recency),
-                   while if there is a conflict between two Wikipedias, trust the one which is more likely to have the right answer (reputation)."&gt;
+                   description="The idea that more recent articles from Wikipedia
+                        could capture better values that change over time (recency),
+                        while if there is a conflict between two Wikipedias, trust the one
+                        which is more likely to have the right answer (reputation)."&gt;
 
     &lt;AssessmentMetric id="sieve:reputation"&gt;
         &lt;ScoringFunction class="ScoredList"&gt;
            &lt;Param name="list"
-                  value="http://pt.wikipedia.org http://en.wikipedia.org http://es.wikipedia.org http://fr.wikipedia.org http://de.wikipedia.org"/&gt;
+                  value="http://pt.wikipedia.org http://en.wikipedia.org
+                         http://es.wikipedia.org http://fr.wikipedia.org http://de.wikipedia.org"/&gt;
         &lt;/ScoringFunction&gt;
     &lt;/AssessmentMetric&gt;
 
@@ -231,7 +234,8 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
       Example input: 
 <pre>
 &lt;ScoringFunction class="ScoredList"&gt;
-  &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org http://es.wikipedia.org"/&gt;
+  &lt;Param name="list"
+         value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org http://es.wikipedia.org"/&gt;
 &lt;/ScoringFunction&gt;
 </pre>
       Example output: {http://en.wikipedia.org=1, http://pt.wikipedia.org=0.75, http://de.wikipedia.org=0.5, http://es.wikipedia.org=0.25, http://fr.wikipedia.org=0}</li>
@@ -240,7 +244,8 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
       Example input: 
 <pre>
 &lt;ScoringFunction class="ScoredPrefixList"&gt;
-  &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org  http://es.wikipedia.org"/&gt;
+  &lt;Param name="list"
+         value="http://en.wikipedia.org http://pt.wikipedia.org http://de.wikipedia.org  http://es.wikipedia.org"/&gt;
 &lt;/ScoringFunction&gt;
 </pre>
       Example output: {http://en.wikipedia.org/wiki/Berlin=1, http://pt.wikipedia.org/wiki/Berlin=0.75, http://de.wikipedia.org/wiki/Berlin=0.5, http://es.wikipedia.org/wiki/Berlin=0.25, http://fr.wikipedia.org/wiki/Berlin=0}</li>
@@ -448,8 +453,10 @@ Recency will be measured by looking at the <code>lastUpdated</code> property, wh
 
 
    &lt;QualityAssessment name="Recent and Reputable is Best"
-                      description="The idea that more recent articles from Wikipedia could capture better values that change over time (recency),
-                      while if there is a conflict between two Wikipedias, trust the one which is more likely to have the right answer (reputation)."&gt;
+                      description="The idea that more recent articles from Wikipedia
+                                   could capture better values that change over time (recency),
+                                   while if there is a conflict between two Wikipedias, trust the one
+                                   which is more likely to have the right answer (reputation)."&gt;
 
        &lt;AssessmentMetric id="sieve:recency"&gt;
            &lt;ScoringFunction class="TimeCloseness"&gt;
@@ -460,7 +467,8 @@ Recency will be measured by looking at the <code>lastUpdated</code> property, wh
 
        &lt;AssessmentMetric id="sieve:reputation"&gt;
            &lt;ScoringFunction class="ScoredList"&gt;
-               &lt;Param name="list" value="http://en.wikipedia.org http://pt.wikipedia.org http://es.wikipedia.org http://fr.wikipedia.org"/&gt;
+               &lt;Param name="list"
+                      value="http://en.wikipedia.org http://pt.wikipedia.org http://es.wikipedia.org http://fr.wikipedia.org"/&gt;
            &lt;/ScoringFunction&gt;
        &lt;/AssessmentMetric&gt;
    &lt;/QualityAssessment&gt;
@@ -543,15 +551,15 @@ If you choose to output quality scores, then you should also notice many triples
   <li>Pablo N. Mendes, Hannes Mühleisen, Christian Bizer. <b>Sieve: Linked Data Quality Assessment and Fusion</b>. 2nd International Workshop on Linked Web Data Management (LWDM 2012) at the 15th International Conference on Extending Database Technology, EDBT 2012. [<a href="http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/research/publications/Mendes-Muehleisen-Bizer-Sieve-LWDM2012.pdf">pdf</a>]
   <pre>
 @inproceedings{lwdm12mendes,
-       booktitle = {2nd International Workshop on Linked Web Data Management (LWDM 2012)
-                    at the 15th International Conference on Extending Database Technology, EDBT 2012},
-           month = {March},
-           title = {{Sieve: Linked Data Quality Assessment and Fusion}},
-          author = {Mendes, Pablo N. and M\"{u}hleisen, Hannes and Bizer, Christian} 
-            year = {2012},
-           pages = {to appear},
-           url = {http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/research/publications/Mendes-Muehleisen-Bizer-Sieve-LWDM2012.pdf},
-    howpublished = {invited paper}
+    booktitle = {2nd International Workshop on Linked Web Data Management (LWDM 2012)
+                 at the 15th International Conference on Extending Database Technology, EDBT 2012},
+        month = {March},
+        title = {{Sieve: Linked Data Quality Assessment and Fusion}},
+       author = {Mendes, Pablo N. and M\"{u}hleisen, Hannes and Bizer, Christian}
+         year = {2012},
+        pages = {to appear},
+          url = {http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/research/publications/Mendes-Muehleisen-Bizer-Sieve-LWDM2012.pdf},
+ howpublished = {invited paper}
 }</pre>
   <iframe src="http://www.slideshare.net/slideshow/embed_code/12271401" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
  </li>
