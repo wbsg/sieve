@@ -21,13 +21,15 @@
   	<a href="http://wifo5-03.informatik.uni-mannheim.de/pubby/" title="Pubby &ndash; A Linked Data Frontend for SPARQL Endpoints can be used to add Linked Data interfaces to SPARQL endpoints" >Pubby</a>
   	<a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/rdfapi/" title="RAP &ndash; RDF API for PHP is a software package for parsing, querying, manipulating, serializing and serving RDF models" >RAP</a>
   	</div>
-  	<div id="wbsg_navbar_intro">Open Source projects by the <a href="http://wbsg.de">Web-based Systems Group</a>:&nbsp;&nbsp;</div>
+  	<!--div id="wbsg_navbar_intro">Open Source projects by the <a href="http://wbsg.de">Web-based Systems Group</a>:&nbsp;&nbsp;</div-->
+	<div id="wbsg_navbar_intro">Open Source projects by the <a href="http://dws.informatik.uni-mannheim.de/">Data and Web Science Group</a>:&nbsp;&nbsp;</div>
   </div>
 <!-- End WBSG navbar -->
 
-<div id="logo" align="right">
+<!--div id="logo" align="right">
 	<a href="http://wbsg.de"><img src="http://ldif.wbsg.de/images/fu-logo.gif" alt="Freie Universität Berlin Logo" border="0"></a>
-</div>
+</div-->
+<DIV id=logo><A href="http://dws.informatik.uni-mannheim.de/"><IMG src="images/logo_uni_en.gif" alt="Universit&auml;t Mannheim Logo"></A> </DIV>
 
 <div id="header">
 <h1 style="font-size: 200%;">Sieve - Linked Data Quality Assessment and Fusion</h1>
@@ -38,7 +40,8 @@
 <div id="authors">
 <a href="http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/team/MendesPablo.html">Pablo N. Mendes</a><br>
 <a href="http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/team/HannesMuehleisen.html">Hannes M&uuml;leisen</a><br>
-<a href="http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/team/BizerChristian.html">Christian Bizer</a><br>
+<a href="http://www.wiwiss.fu-berlin.de/en/institute/pwo/bizer/team/HannesMuehleisen.html">Volha Bryl</a><br>
+<a href="http://dws.informatik.uni-mannheim.de/en/people/professors/prof-dr-christian-bizer/">Christian Bizer</a><br>
 </div>
 
 <div id="content">
@@ -55,7 +58,7 @@
 <h2 id="news">News</h2>
 <div>
  <ul>
-  <li><b>12/12/2013</b>: ... </li>
+  <li><b>12/12/2013</b>: The final version of the Data Fusion component is released with <a href="http://ldif.wbsg.de/">LDIF 0.5.2</a>, including <a href="FPL.html">Fusion Policy Learner</a> module, new quality assessment scores and fusion functions, and various bugfixes. </li>
   <li><b>14/11/2012</b>: Sieve <b>new version</b> released with  <a href="http://ldif.wbsg.de/">LDIF 0.5.1</a>, including various bugfixes.</li>
   <li><b>12/08/2012</b>: Bugfixes; Additional Functions; Quality Assessment and Data Fusion modules integrated with the LOD2 Stack.</li>
   <li><b>03/04/2012</b>: <b>First implementation</b> included in <a href="http://ldif.wbsg.de/">LDIF 0.5</a>.</li> <!-- http://lists.w3.org/Archives/Public/public-lod/2012Apr/0041.html -->
@@ -269,6 +272,15 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
 &lt;/ScoringFunction&gt;
 </pre>
   </li>
+  <li><i>NormalizedCount</i>: normalizes indicator values by the threshold provided as a parameter, if the value of an indicator is greater than the threshold outputs  1.0.
+<pre>
+&lt;ScoringFunction class="NormalizedCount"&gt;
+  &lt;Param name="maxCount" value="100"/&gt;
+  &lt;Input path="?GRAPH/example:numberOfEdits"/&gt;
+&lt;/ScoringFunction&gt;
+</pre>
+  </li>    
+  
 </ul>
 
   <!--aggregation functions--
@@ -386,20 +398,28 @@ object FusionFunction {
 <div>
 <p>The currently implemented fusion functions are:</p>
 <ul>
-  <li><i>Filter</i>: removes all values for which the input quality assessment metric is below a given threshold.
+  <!--li><i>Filter</i>: removes all values for which the input quality assessment metric is below a given threshold.
 <pre>
  &lt;FusionFunction class="Filter" metric="sieve:reputation"&gt;
     &lt;Param name="threshold" value="0.85"/&gt;
  &lt;/FusionFunction&gt;
 </pre> 
-  </li>
+  </li-->
+  <li><i>PassItOn</i>: does nothing, passes values on to the next component in the pipeline.</li>
   <li><i>KeepFirst</i>: keeps the value with the highest value for a given quality assessment metric. In case of ties, the function keeps the first in order of input.
 <pre>
  &ltFusionFunction class="KeepFirst" metric="sieve:reputation"/&gt;
 </pre> 
  </li>
  <li><i>KeepAllValuesByQualityScore</i>: similar to <i>KeepFirst</i>, but in case of ties, it keeps all values with the highest score.</li>
- <li><i>Average</i>: takes the average of all input data for a given property.</li>
+ <li><i>KeepLowest</i>: keeps the value with the lowest value for a given quality assessment metric. In case of ties, the function keeps the first in order of input. Used to invert scores, e.g. to invert  TimeCloseness  to  consider the  most 
+experienced author (active since the earliest date).</li>
+ <li><i>Average</i>: takes the average of all input data for a given property.
+ <pre>
+ &ltFusionFunction class="Average"/&gt;
+</pre> 
+ </li>
+ <li><i>Maximum</i>: takes the maximum of all input data for a given property.</li>
  <li><i>Voting</i>: picks the value that appeared most frequently across sources. Each named graph has one vote, the most voted value is chosen.</li>
  <li><i>WeightedVoting</i>: picks the value that appeared most frequently across highly rated sources. Each named graph has one vote proportional to its score for a given quality metric, the value with highest aggregated scores is chosen.</li>
 </ul>
