@@ -47,7 +47,7 @@
 <h2 id="news">News</h2>
 <div>
  <ul>
-  <li><b>19/12/2013</b>: First version realesed... </li>
+  <li><b>19/12/2013</b>: First version realesed, check the <a href="https://github.com/wbsg/ldif/tree/master/ldif/ldif-modules/ldif-sieve/ldif-sieve-fpl">LDIF repository</a>.</li>
  </ul>
 </div>
 
@@ -55,7 +55,7 @@
 <h2 id="contents">Contents</h2>
 <div>
  <ol class="toc">
-  <li><a href="#about">Fusion Policy Learner within Sieve</a></li>
+  <li><a href="#about">About</a></li>
   <li><a href="#input">Input specification</a></li>
   <li><a href="#examples">Examples</a><br></li>
   <li><a href="#development">Source code and development</a></li>
@@ -66,50 +66,145 @@
 </div>
 
 
-<h2 id="about">1. Fusion Policy Learner within Sieve</h2>
+<h2 id="about">1. About</h2>
 <div>
   <p>
-      The <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc23">Web of Linked Data</a> grows rapidly and contains data originating from <a href="http://www4.wiwiss.fu-berlin.de/lodcloud/state/">hundreds of data sources</a>.
-      The quality of data from those sources is very diverse, as values may be out of date, incomplete or incorrect.
-      Moreover, data sources may provide conflicting values for the same properties.
+	<a href="http://sieve.wbsg.de/">Sieve</a> data quality assessment and data fusion framework provides a library of quality assessment scores and fusion functions, 
+	and an XML-based input specification language to combine them. Howevere, manually defining a fusion policy, i.e. which fusion function and with what parameters 
+	to use for which data attribute, requires certain domain knowledge and understanding of the input data, is time-consuming, and does not guarantee an optimal result. 
   </p>
   <p>
-      In order for <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc75">Linked Data applications</a> to consume data from this global data space in an integrated fashion, a number of challenges have to be overcome.
-      The <a href="http://ldif.wbsg.de/">Linked Data Integration Framework (LDIF)</a> provides a modular architecture that homogenizes Web data into a target representation as configured by the user. LDIF includes Data Access, <a href="http://www4.wiwiss.fu-berlin.de/bizer/r2r/">Schema Mapping</a>, <a href="http://www4.wiwiss.fu-berlin.de/bizer/silk/">Identity Resolution</a> and Data Output modules. This document describes Sieve, which adds quality assessment and data fusion capabilities to the LDIF architecture.
+	Therefore, we introduce the Fusion Policy Learner, an extension of Sieve that allows automatically selecting an optimal fusion function based on the gold standard.
+	The user is still involved in the process as the list of possible fusion functions per property needs to be manually specified. 
   </p>
   <p>
-      Sieve uses metadata about named graphs (e.g. provenance) in order to assess data quality as defined by users.
-      Sieve is agnostic to provenance vocabulary and quality models.
-      Through its configuration files, Sieve is able to access provenance expressed in different ways, and uses customizable scoring functions
-      to output data quality descriptors according to a user-specified data-quality vocabulary.
+    The learning algorithm implemented in the Fusion Policy Learner selects the fusion function that minimizes the error with respect to the gold standard. 
+	The list of fusion functions and the respective quality assessment scores for each property are defined by the user in the input specification, which is written 
+	using the extended version of the XML-based Sieve specification language. 
   </p>
   <p>
-      Based on these quality descriptors (and/or optionally other descriptors computed elsewhere), Sieve can use configurable FusionFunctions to clean the data according to task-specific requirements.
+	The algorithm first detects whether the values to fuse are numeric or nominal; examples of nominal attributes are strings and URIs. 
+	Then, one of the following strategies are applied: (1) a fusion function that minimizes the mean absolute error with respect to the gold standard is selected, or 
+	(2) given a maximum error threshold (e.g. 5%), the fusion function that maximizes the number of values that deviates from a respective gold standard value no more than by a threshold, is selected.
   </p>
-
   
-<h2 id="input">3. Input specification</h2>
+  
+<h2 id="input">2. Input specification</h2>
 
+<p>Below you see an example of input specification for the Fusion Policy Learner:</p>
 
-<h2 id="examples">5. Examples</h2>
+<pre>
+1 &lt;SieveFPL&gt;
+2	&lt;Parameters&gt;
+3		&lt;!--SelectionMethod name="MinAbsError"/--&gt;
+4		&lt;SelectionMethod name="MaxCorrectValues" error="0.05"/&gt;
+5	&lt;/Parameters&gt;
+6	&lt;Input&gt;
+7		&lt;GoldStandard&gt;gold\cities1000_gold_triples.nt&lt;/GoldStandard&gt;
+8		&lt;dumpLocation&gt;dumps-3cities&lt;/dumpLocation&gt;	
+9		&lt;SieveExec&gt;c:\ldif-0.5.1\bin\ldif.bat&lt;/SieveExec&gt;
+10	&lt;/Input&gt;
+11	&lt;Output&gt;
+12		&lt;SieveSpec&gt;sieve-optimal\sieve_optimal.xml&lt;/SieveSpec&gt;		
+13		&lt;FPLReport&gt;FPL_report.txt&lt;/FPLReport&gt;
+14		&lt;!--FPLReport valmatrix = "true"&gt;FPL_report.txt&lt;/FPLReport--&gt;
+15	&lt;/Output&gt;
+16	&lt;Sieve xmlns="http://www4.wiwiss.fu-berlin.de/ldif/"&gt;
+17		&lt;Prefixes&gt; 
+18			&lt;Prefix id="dbpedia-owl" namespace="http://dbpedia.org/ontology/"/&gt;
+19			&lt;Prefix id="ldif" namespace="http://www4.wiwiss.fu-berlin.de/ldif/"/&gt;
+20			&lt;Prefix id="sieve" namespace="http://sieve.wbsg.de/vocab/"/&gt;
+21			&lt;Prefix id="dbpedia-meta" namespace="http://dbpedia.org/metadata/"/&gt;
+22		&lt;/Prefixes&gt;
+23		&lt;QualityAssessment&gt;
+24			&lt;AssessmentMetric id="sieve:authactivity"&gt;
+25				&lt;ScoringFunction class="NormalizedCount"&gt;
+26					&lt;Param name="maxCount" value="4250000"/&gt;
+27					&lt;Input path="?GRAPH/dbpedia-meta:autheditcnt"/&gt;
+28				&lt;/ScoringFunction&gt;
+29			&lt;AssessmentMetric id="sieve:recency"&gt;
+30				&lt;ScoringFunction class="TimeCloseness"&gt;
+31					&lt;Param name="timeSpan" value="500"/&gt;
+32					&lt;Input path="?GRAPH/dbpedia-meta:lastedit"/&gt;
+33				&lt;/ScoringFunction&gt;
+34			&lt;/AssessmentMetric&gt;
+35		&lt;/QualityAssessment&gt;
+36		&lt;Fusion&gt;
+37			&lt;Class name="dbpedia-owl:PopulatedPlace"&gt;
+38				&lt;Property name="dbpedia-owl:areaTotal"&gt;
+39					&lt;FusionFunction class="KeepFirst" metric="sieve:recency"/&gt;
+40					&lt;FusionFunction class="KeepFirst" metric="sieve:authactivity"/&gt;
+41					&lt;FusionFunction class="Voting"/&gt;
+42					&lt;FusionFunction class="Average"/&gt;
+43				&lt;/Property&gt;
+44				&lt;Property name="dbpedia-owl:populationTotal"&gt;
+45					&lt;FusionFunction class="KeepFirst" metric="sieve:recency"/&gt;
+46					&lt;FusionFunction class="Average"/&gt;
+47					&lt;FusionFunction class="Maximum"/&gt;
+48				&lt;/Property&gt;
+49			&lt;/Class&gt;
+50		&lt;/Fusion&gt;
+51	&lt;/Sieve&gt;
+52 &lt;/SieveFPL&gt;
+</pre>
 
+<p>
+The root tag is &lt;SieveFPL&gt;, under which four elements are to be specified: 
+parameters of the learning algorithm (lines 2-5), 
+input (lines 7-11) and output (lines 12-15) paths, 
+and the extended Sieve specification (lines 16-20). 
+</p>
+<p>
+The &lt;SelectionMethod&gt; element is used to specify the parameters of the learning algorithm for numeric data values. 
+Specifically, MinAbsError value of the name attribute corresponds to the 1st learning strategy introduced aboove, 
+and the MaxCorrectValues – to the 2nd one with error attribute defining the maximum error threshold.
+</p>
+<p>In the input section, the following parameters are specified:</p>
+<ul>
+    <li>&lt;GoldStandard&gt;: path to the gold standard dump, should be in N-TRIPLE format;</li>
+	<li>&lt;dumpLocation&gt;: path to the input dumps, dumps should be in N-QUAD format (the same requirement as for the input data in Sieve Data Fusion module);</li>
+	<li>&lt;SieveExec&gt;: path to the Sieve shell script or batch file.</li>
+</ul>
+<p>The output section contains the following two paths to the output files generated by the tool:</p>
+<ul>
+    <li>&lt;SieveSpec&gt;: path to the resulting Sieve specification file;</li>
+	<li>&lt;FPLReport&gt;: path to the report summarizing the learning process.  </li>
+</ul>
+<p>
+Finally, &lt;Sieve&gt; element contains the extended or "redundant" Sieve specification: for each property a list of fusion functions is defined by the user, 
+and the learner selects an optimal one from the list with respect to the gold standard. 
+</p>
+<p>
+In lines 39-42 four fusion functions (keep the most recent value, keep the value added by the most active author, most frequent, average) are specified for the areaTotal property of a populated place. 
+The learner will choose and put into the final Sieve specification (line 12) only one of these three functions, in accordance with the selection method defined in &lt;Parameters&gt; element. 
+Note that in the current version of the Fusion Policy Learner the learning can be performed for only one class at a time, that is learning the optimal fusion strategies for the properties of 
+e.g. dbpedia-owl:CelestialBody would require another specification file.
+</p>
 
-<h2 id="development">6. Source Code and Development</h2>
+<h2 id="examples">3. Examples</h2>
+
+<p>
+The multilingual DBpedia example for the Fusion Policy Learner in the <a href="https://github.com/wbsg/ldif/tree/master/ldif/examples/dbpedia-multilang/">LDIF repository</a>. 
+The goal in this example is to fuse data for the same city from multiple language editions of DBpedia (and hence, Wikipedia). In the repository you find the input specification 
+along with data dumps, provenance metadata and gold standard.
+</p>
+
+<h2 id="development">4. Source Code and Development</h2>
 <div>
 <p>The latest source code is available from the <a href="http://github.com/wbsg/ldif/">LDIF development page</a> on GitHub.</p>
 <p>The framework can be used under the terms of the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License</a>.
 </p>
 </div>
 
-<h2 id="feedback">7. Support and Feedback </h2>
+<h2 id="feedback">5. Support and Feedback </h2>
 <div>
 <p>For questions and feedback please use the <a href="http://groups.google.com/group/ldif?hl=en">LDIF Google Group</a>.</p>
 </div>
 
 
-<!--h2 id="references">8. References</h2-->
+<!--h2 id="references">6. References</h2-->
 
-<h2 id="acknowledgments">9. Acknowledgments </h2>
+<h2 id="acknowledgments">6. Acknowledgments </h2>
 <div>
 <p>This work was supported by the EU FP7 grant <a href="http://lod2.eu/">LOD2 - Creating Knowledge out of Interlinked Data</a> (Grant No. 257943).</p>
 <!--p>WooFunction icon set licensed under <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.</p-->
