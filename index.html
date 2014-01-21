@@ -89,25 +89,24 @@
 
 
 <h2 id="about">1. About Sieve</h2>
-<div>
-  <p>
-      The <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc23">Web of Linked Data</a> grows rapidly and contains data originating from <a href="http://www4.wiwiss.fu-berlin.de/lodcloud/state/">hundreds of data sources</a>.
-      The quality of data from those sources is very diverse, as values may be out of date, incomplete or incorrect.
-      Moreover, data sources may provide conflicting values for the same properties.
-  </p>
-  <p>
-      In order for <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc75">Linked Data applications</a> to consume data from this global data space in an integrated fashion, a number of challenges have to be overcome.
-      The <a href="http://ldif.wbsg.de/">Linked Data Integration Framework (LDIF)</a> provides a modular architecture that homogenizes Web data into a target representation as configured by the user. LDIF includes Data Access, <a href="http://www4.wiwiss.fu-berlin.de/bizer/r2r/">Schema Mapping</a>, <a href="http://www4.wiwiss.fu-berlin.de/bizer/silk/">Identity Resolution</a> and Data Output modules. This document describes Sieve, which adds quality assessment and data fusion capabilities to the LDIF architecture.
-  </p>
-  <p>
-      Sieve uses metadata about named graphs (e.g. provenance) in order to assess data quality as defined by users.
-      Sieve is agnostic to provenance vocabulary and quality models.
-      Through its configuration files, Sieve is able to access provenance expressed in different ways, and uses customizable scoring functions
-      to output data quality descriptors according to a user-specified data-quality vocabulary.
-  </p>
-  <p>
-      Based on these quality descriptors (and/or optionally other descriptors computed elsewhere), Sieve can use configurable FusionFunctions to clean the data according to task-specific requirements.
-  </p>
+<p>
+  The <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc23">Web of Linked Data</a> grows rapidly and contains data originating from <a href="http://www4.wiwiss.fu-berlin.de/lodcloud/state/">hundreds of data sources</a>.
+  The quality of data from those sources is very diverse, as values may be out of date, incomplete or incorrect.
+  Moreover, data sources may provide conflicting values for the same properties.
+</p>
+<p>
+  In order for <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc75">Linked Data applications</a> to consume data from this global data space in an integrated fashion, a number of challenges have to be overcome.
+  The <a href="http://ldif.wbsg.de/">Linked Data Integration Framework (LDIF)</a> provides a modular architecture that homogenizes Web data into a target representation as configured by the user. LDIF includes Data Access, <a href="http://www4.wiwiss.fu-berlin.de/bizer/r2r/">Schema Mapping</a>, <a href="http://www4.wiwiss.fu-berlin.de/bizer/silk/">Identity Resolution</a> and Data Output modules. This document describes Sieve, which adds quality assessment and data fusion capabilities to the LDIF architecture.
+</p>
+<p>
+  Sieve uses metadata about named graphs (e.g. provenance) in order to assess data quality as defined by users.
+  Sieve is agnostic to provenance vocabulary and quality models.
+  Through its configuration files, Sieve is able to access provenance expressed in different ways, and uses customizable scoring functions
+  to output data quality descriptors according to a user-specified data-quality vocabulary.
+</p>
+<p>
+  Based on these quality descriptors (and/or optionally other descriptors computed elsewhere), Sieve can use configurable FusionFunctions to clean the data according to task-specific requirements.
+</p>
 <!--p>The LDIF integration pipeline consists of the following steps:
 </p><ol>
 	<li><b>Collect Data</b>: Access modules locally replicate data sets via file download, crawling or SPARQL.</li>
@@ -118,11 +117,9 @@ local target vocabulary.</li>
 single target URI based on user-provided matching heuristics.</li>
 	<li><b>Output</b>: LDIF outputs the integrated data in a single file. For provenance tracking, LDIF employs the Named Graphs data model.</li>
 </ol-->
-</div>
 
 
 <h2 id="components">2. Sieve within LDIF Architecture</h2>
-<div>
 <p>The figure below shows the schematic <a href="http://linkeddatabook.com/editions/1.0/index.html#htoc84">architecture of Linked Data applications</a>
 that implement the crawling/data warehousing pattern. The figure highlights the steps of the data integration process that are currently supported by LDIF.</p>
 
@@ -134,7 +131,6 @@ The pluggable modules include Data Access (dumps, crawler and SPARQL), Transform
 <p>
 Sieve is employed as the quality evaluation module in LDIF (see figure 1). The data cleaning procedure in Sieve works in two steps. The first step, Quality Assessment, associates quality-scores to the named
 graphs that are used in LDIF for provenance tracking and that group subsets of triples together. The second step uses this metadata to decide on how to fuse conflicting property values according to user configuration.
-
 </p>
 
 <h2 id="qualityassessment">3. Quality Assessment</h2>
