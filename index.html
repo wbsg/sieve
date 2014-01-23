@@ -220,7 +220,7 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
 <div>
 <p>There is a vast number of possible scoring functions for quality assessment. We do not attempt to implement all of them. The currently implemented scoring functions are:</p>
 <ul>
-  <li><i>TimeCloseness</i>: measures the distance from the input date (obtained from the input metadata through a path expression) to the current (system) date. Dates outside the range (informed in number of days) receive value 0, and dates that are more recent receive values closer to 1. Example input:
+  <li><i>TimeCloseness</i>: measures the distance from the input date (obtained from the input metadata through a path expression) to the current (system) date. Dates outside the range (expressed in number of days) receive value 0, and dates that are more recent receive values closer to 1. Example input:
 <pre>
 &lt;ScoringFunction class="TimeCloseness"&gt;
   &lt;Param name="range" value="7"/&gt;
