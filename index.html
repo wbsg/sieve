@@ -403,7 +403,7 @@ object FusionFunction {
 </pre> 
   </li-->
   <li><i>PassItOn</i>: does nothing, passes values on to the next component in the pipeline.</li>
-  <li><i>KeepFirst</i>: keeps the value with the highest value for a given quality assessment metric. In case of ties, the function keeps the first in order of input.
+  <li><i>KeepFirst</i>: keeps the value with the highest score for a given quality assessment metric. In case of ties, the function keeps the first value in the order of input.
 <pre>
  &ltFusionFunction class="KeepFirst" metric="sieve:reputation"/&gt;
 </pre> 
@@ -418,7 +418,7 @@ experienced author (active since the earliest date).</li>
  </li>
  <li><i>Maximum</i>: takes the maximum of all input data for a given property.</li>
  <li><i>Voting</i>: picks the value that appeared most frequently across sources. Each named graph has one vote, the most voted value is chosen.</li>
- <li><i>WeightedVoting</i>: picks the value that appeared most frequently across highly rated sources. Each named graph has one vote proportional to its score for a given quality metric, the value with highest aggregated scores is chosen.</li>
+ <li><i>WeightedVoting</i>: picks the value that appeared most frequently across highly rated sources. Each named graph has one vote proportional to its score for a given quality metric, the value with the highest aggregated scores is chosen.</li>
 </ul>
 </div>
 </div>
