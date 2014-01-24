@@ -250,8 +250,8 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
 </pre>
       Example output: {http://en.wikipedia.org/wiki/Berlin=1, http://pt.wikipedia.org/wiki/Berlin=0.75, http://de.wikipedia.org/wiki/Berlin=0.5, http://es.wikipedia.org/wiki/Berlin=0.25, http://fr.wikipedia.org/wiki/Berlin=0}</li>
   </li>
-  <!--li><i>SetMembership</i>: assigns 1 if the value of the indicator provided as input belongs to the set informed as parameter, 0 otherwise.</li-->
-  <li><i>Threshold</i>: assigns 1 if the value of the indicator provided as input is higher than a threshold informed as parameter, 0 otherwise.
+  <!--li><i>SetMembership</i>: assigns 1 if the value of the indicator provided as input belongs to the set specified as parameter, 0 otherwise.</li-->
+  <li><i>Threshold</i>: assigns 1 if the value of the indicator provided as input is higher than a threshold specified as parameter, 0 otherwise.
 <pre>
 &lt;ScoringFunction class="Threshold"&gt;
   &lt;Param name="threshold" value="5"/&gt;
@@ -260,7 +260,7 @@ is described by this <a href="https://github.com/wbsg/ldif/blob/master/ldif/ldif
 </pre>
       Example output: {http://en.wikipedia.org/wiki/DBpedia=1, http://pt.wikipedia.org/wiki/DBpedia=0}
   </li>
-  <li><i>Interval</i>: assigns 1 if the value of the indicator provided as input is within the interval informed as parameter, 0 otherwise.
+  <li><i>Interval</i>: assigns 1 if the value of the indicator provided as input is within the interval specified as parameter, 0 otherwise.
 <pre>
 &lt;ScoringFunction class="Interval"&gt;
   &lt;Param name="from" value="6"/&gt;
