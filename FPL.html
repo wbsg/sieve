@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>Sieve</title>
+<html><head><title>Fusion Policy Learner</title>
   <link rel="StyleSheet" href="stylesheets/style.css" type="text/css" media="screen"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
@@ -32,7 +32,7 @@
 <DIV id=logo><A href="http://dws.informatik.uni-mannheim.de/"><IMG src="images/logo_uni_en.gif" alt="Universit&auml;t Mannheim Logo"></A> </DIV>
 
 <div id="header">
-<h1 style="font-size: 200%;">Fusion Policy Learner</h1>
+<h1 style="font-size: 200%;">Fusion Policy Learner (FPL)</h1>
 </div>
 
 <div id="tagline">A Sieve module for automatically learning data fusion policies</div>
@@ -56,9 +56,10 @@
 <div>
  <ol class="toc">
   <li><a href="#about">About</a></li>
-  <li><a href="#input">Input specification</a></li>
-  <li><a href="#examples">Examples</a><br></li>
-  <li><a href="#development">Source code and development</a></li>
+  <li><a href="#input">Input Specification</a></li>
+  <li><a href="#output">Output</a><br></li>
+  <li><a href="#start">Quick Start and Examples</a><br></li>
+  <li><a href="#development">Source Code and Development</a></li>
   <li><a href="#feedback">Support and Feedback</a></li>
   <!--li><a href="#references">References</a></li-->
   <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -71,26 +72,29 @@
 <h2 id="about">1. About</h2>
   <p>
 	<a href="http://sieve.wbsg.de/">Sieve</a> data quality assessment and data fusion framework provides a library of quality assessment scores and fusion functions, 
-	and an XML-based input specification language to combine them. Howevere, manually defining a fusion policy, i.e. which fusion function and with what parameters 
-	to use for which data attribute, requires certain domain knowledge and understanding of the input data, is time-consuming, and does not guarantee an optimal result. 
+	and an XML-based input specification language to combine them. However, manually defining a fusion policy - that is, which fusion function and with what parameters 
+	to use for which data attribute - requires certain domain knowledge and understanding of the input data, is time-consuming, and does not guarantee an optimal result. 
   </p>
   <p>
-	Therefore, we introduce the Fusion Policy Learner, an extension of Sieve that allows automatically selecting an optimal fusion function based on the gold standard.
+	Therefore, we introduce <b>Fusion Policy Learner</b>, an extension of Sieve that allows automatically selecting an optimal fusion function based on the gold standard.
 	The user is still involved in the process as the list of possible fusion functions per property needs to be manually specified. 
   </p>
   <p>
-    The learning algorithm implemented in the Fusion Policy Learner selects the fusion function that minimizes the error with respect to the gold standard. 
-	The list of fusion functions and the respective quality assessment scores for each property are defined by the user in the input specification, which is written 
+    The learning algorithm implemented in the Fusion Policy Learner selects the fusion function that minimizes the error with respect to a <i>gold standard</i>. 
+	The list of fusion functions and the respective quality assessment scores for each property are defined in the input specification, which is written 
 	using the extended version of the XML-based Sieve specification language. 
   </p>
   <p>
-	The algorithm first detects whether the values to fuse are numeric or nominal; examples of nominal attributes are strings and URIs. 
-	Then, one of the following strategies are applied: (1) a fusion function that minimizes the mean absolute error with respect to the gold standard is selected, or 
-	(2) given a maximum error threshold (e.g. 5%), the fusion function that maximizes the number of values that deviates from a respective gold standard value no more than by a threshold, is selected.
+	The learning algorithm first detects, based on the gold standard, whether the values to fuse are numeric or nominal; examples of nominal values are strings and URIs.
+  </p>
+  <p id="learning">
+	Then for numeric properties one of the two learning strategies is applied: <b>(1)</b> a fusion function that minimizes the <i>mean absolute error</i> with respect to the gold 
+	standard is selected, or <b>(2)</b> given a <i>maximum error threshold</i> (e.g. 5%), the function that maximizes the number of values that deviates from the gold standard 
+	no more than by a threshold, is selected. In case of nominal values, the fusion function that produces the maximum number of exact matches with the gold standard is selected.
   </p>
   
   
-<h2 id="input">2. Input specification</h2>
+<h2 id="input">2. Input Specification</h2>
 
 <p>Below you see an example of input specification for the Fusion Policy Learner:</p>
 
@@ -102,8 +106,8 @@
 5	&lt;/Parameters&gt;
 6	&lt;Input&gt;
 7		&lt;GoldStandard&gt;gold\cities1000_gold_triples.nt&lt;/GoldStandard&gt;
-8		&lt;dumpLocation&gt;dumps-3cities&lt;/dumpLocation&gt;	
-9		&lt;SieveExec&gt;c:\ldif-0.5.1\bin\ldif.bat&lt;/SieveExec&gt;
+8		&lt;dumpLocation&gt;dumps-nl&lt;/dumpLocation&gt;	
+9		&lt;SieveExec&gt;c:\ldif-0.5.2\bin\ldif.bat&lt;/SieveExec&gt;
 10	&lt;/Input&gt;
 11	&lt;Output&gt;
 12		&lt;SieveSpec&gt;sieve-optimal\sieve_optimal.xml&lt;/SieveSpec&gt;		
@@ -150,68 +154,134 @@
 </pre>
 
 <p>
-The root tag is &lt;SieveFPL&gt;, under which four elements are to be specified: 
+The root tag is &lt;SieveFPL&gt;, under which <b>4 elements</b> have to be specified: 
 parameters of the learning algorithm (lines 2-5), 
 input (lines 7-11) and output (lines 12-15) paths, 
 and the extended Sieve specification (lines 16-20). 
 </p>
 <p>
-The &lt;SelectionMethod&gt; element is used to specify the parameters of the learning algorithm for numeric data values. 
-Specifically, MinAbsError value of the name attribute corresponds to the 1st learning strategy introduced aboove, 
-and the MaxCorrectValues – to the 2nd one with error attribute defining the maximum error threshold.
+The <b>&lt;SelectionMethod&gt;</b> element (lines 3-4) is used to specify the parameters of the learning algorithm for numeric data values. 
+<i>MinAbsError</i> value of the <i>name</i> attribute corresponds to the 1st learning strategy (<a href="#learning">see above</a>), 
+and <i>MaxCorrectValues</i> – to the 2nd one with <i>error</i> attribute defining the maximum error threshold.
 </p>
-<p>In the input section, the following parameters are specified:</p>
+<p>In the <b>&lt;Input&gt;</b> section the following parameters are specified:</p>
 <ul>
-    <li>&lt;GoldStandard&gt;: path to the gold standard dump, should be in N-TRIPLE format;</li>
-	<li>&lt;dumpLocation&gt;: path to the input dumps, dumps should be in N-QUAD format (the same requirement as for the input data in Sieve Data Fusion module);</li>
+    <li>&lt;GoldStandard&gt;: path to the gold standard dump, should be in N-TRIPLE format <i>(all paths are relative to the specification file path)</i>;</li>
+	<li>&lt;dumpLocation&gt;: path to the input dumps, should be in N-QUAD format (the same requirement as for the input data in Sieve);</li>
 	<li>&lt;SieveExec&gt;: path to the Sieve shell script or batch file.</li>
 </ul>
-<p>The output section contains the following two paths to the output files generated by the tool:</p>
+<p>The <b>&lt;Output&gt;</b> section contains the following two paths to the output files generated by the tool:</p>
 <ul>
     <li>&lt;SieveSpec&gt;: path to the resulting Sieve specification file;</li>
-	<li>&lt;FPLReport&gt;: path to the report summarizing the learning process.  </li>
+	<li>&lt;FPLReport&gt;: path to the report summarizing the learning process.</li>
 </ul>
-<p>
-Finally, &lt;Sieve&gt; element contains the extended or "redundant" Sieve specification: for each property a list of fusion functions is defined by the user, 
-and the learner selects an optimal one from the list with respect to the gold standard. 
-</p>
-<p>
-In lines 39-42 four fusion functions (keep the most recent value, keep the value added by the most active author, most frequent, average) are specified for the areaTotal property of a populated place. 
-The learner will choose and put into the final Sieve specification (line 12) only one of these three functions, in accordance with the selection method defined in &lt;Parameters&gt; element. 
-Note that in the current version of the Fusion Policy Learner the learning can be performed for only one class at a time, that is learning the optimal fusion strategies for the properties of 
-e.g. dbpedia-owl:CelestialBody would require another specification file.
-</p>
-
-<h2 id="examples">3. Examples</h2>
+Optional <i>valmatrix</i> attribute of &lt;FPLReport&gt; (line 14 should be uncommented to replace line 13) allows including the <i>value matrix</i> to the report, that is, 
+for each property a list of values (one per fusion function) for each subject URI is listed. For the sample specification above, the value matrix for <i>dbpedia-owl:populationTotal</i> 
+(lines 45-47) is as follows. The values refer to <i>keep the most recent</i>, <i>average</i>, <i>maximum </i> and gold standard value, respectively; in the breakets the data source 
+is specifyied  (language code in case of Wikipedia namespaces).
+<pre>
+http://dbpedia.org/resource/Buitenpost		5834 (en)	5777 (average)		5834 (en)	5764 (gold)
+http://dbpedia.org/resource/Noordwijkerhout	15541 (it)	15460 (average)		15541 (ru)	15071 (gold)
+http://dbpedia.org/resource/Harenkarspel	15922 (ru)	15973 (average)		16076 (it)	15941 (gold)
+</pre>
 
 <p>
-The multilingual DBpedia example for the Fusion Policy Learner in the <a href="https://github.com/wbsg/ldif/tree/master/ldif/examples/dbpedia-multilang/">LDIF repository</a>. 
-The goal in this example is to fuse data for the same city from multiple language editions of DBpedia (and hence, Wikipedia). In the repository you find the input specification 
-along with data dumps, provenance metadata and gold standard.
+<b>&lt;Sieve&gt;</b> element contains the extended or "redundant" Sieve specification: for each property a list of fusion functions is defined, 
+and the FPL selects an optimal one from the list with respect to the gold standard. 
+</p>
+<p>
+In <a href="#input">lines 39-42</a> 4 fusion functions - <i> keep the most recent value, keep the value added by the most active author, most frequent, average</i> - are specified for the <i>areaTotal</i> 
+property of a populated place. The FPL chooses and puts into the final Sieve specification (<a href="#input">line 12</a>) only one of these functions, in accordance with the selection method defined in 
+&lt;Parameters&gt;. 
+</p>
+<p>
+In the current FPL version learning can be performed for only one class at a time, which means that learning an optimal fusion policy for the properties 
+of e.g. <i>dbpedia-owl:CelestialBody</i> would require another specification file.
 </p>
 
-<h2 id="development">4. Source Code and Development</h2>
-<div>
+
+<h2 id="output">3. Output</h2>
+
+The output of the tool consists of
+<ul>
+	<li>Sieve specification file (<a href="#input">line 12</a> defines the file name and location, relative to the FLP specification file) that can be used directly for data fusion with Sieve, </li>
+	<li>FPL report file (<a href="#input">line 13</a> defines the file name and location), in which for each property the errors per fusion function are listed.</li>
+</ul>
+
+Below you see an extract of the report corresponding to the <a href="#input">FPL specification presented above</a>.
+
+<pre>
+*** Learning an optimal fusion function for dbpedia-owl:populationTotal property ***
+Number of gold standard values = 493
+According to the gold standard, dbpedia-owl:populationTotal is NUMERIC
+
+Pool of fusion functions:
+0 : &lt;FusionFunction class="KeepFirst" metric="sieve:recency"/&gt;
+1 : &lt;FusionFunction class="Average"/&gt;
+2 : &lt;FusionFunction class="Maximum"/&gt;
+
+Errors per fusion function (functions identified by int ID):
+0, mean absolute error : 0.02368750565457104, count : 493.0
+0, number of 5.0% correct values : 318
+1, mean absolute error : 0.022413082496238555, count : 493.0
+1, number of 5.0% correct values : 301
+2, mean absolute error : 0.021932866337685517, count : 493.0
+2, number of 5.0% correct values : 329
+
+MinAbsError: best fusion function ID, error %, count: 2, 2.193286633768552, 493.0
+MaxCorrectValues: best fusion function ID, number of correct values : 2, 329
+</pre>
+
+<p>
+The report contains the number of gold standard values for <i>dbpedia-owl:populationTotal</i> property (<i>493</i>), the detected property type (<i>numeric</i>), 
+the list of the fusion functions as defined for <i>populationTotal</i> in the FPL specification. Fusion functions are assigned numeric IDs (<i>0, 1, 2</i>), 
+which are then used to report errors for each functions with respect to the gold standard. 
+</p>
+<p>
+For numeric properties, errors are reported for both learning methods: <i>MinAbsError</i> and <i>MaxCorrectValues</i> (with the default 5% threshold), and the optimal 
+(referred  as "best" in the report) functions for both methods are listed. In our example, both selection methods resulted in <i>maximum</i> fusion function to be the optimal one. 
+The final Sieve specification will include only the function which is optimal according to <i>MaxCorrectValues</i> method, as defined in <a href="#input">line 4 of our sample FPL specification</a>. 
+</p>
+
+<h2 id="start">4. Quick Start and Examples</h2>
+
+<p>
+In order to demonstrate the functionalities of the  Fusion Policy Learner, the <i>multilingual DBpedia</i> example is distributed with the LDIF binaries 
+(<i>dbpedia-multilang</i> directory) and can be found in the <a href="https://github.com/wbsg/ldif/tree/master/ldif/examples/dbpedia-multilang/">LDIF repository</a>. 
+The example aims at fusing data for the same city from multiple language editions of DBpedia. In the example directory you find the input specification (<i>SieveFPL.xml</i>) 
+along with data and provenance metadata dumps (<i>dumps-3cities</i> and <i>dumps-nl</i> directories, use one of the two when specifying <i>dumpLocation</i> in 
+<a href="#input">line 8</a>) and gold standard (in <i>gold</i> directory).
+</p>
+
+<p>
+To run the FPL with the multilingual DBpedia example, download and unpack the LDIF binaries, and run
+</p>
+<i>java -jar lib\ldif-sieve-fpl-0.1.1-jar-with-dependencies.jar examples\dbpedia-multilang\SieveFPL.xml</i>
+<p>
+from the directory you have put the binaries to.
+</p>
+
+
+<h2 id="development">5. Source Code and Development</h2>
+
 <p>The latest source code is available from the <a href="http://github.com/wbsg/ldif/">LDIF development page</a> on GitHub.</p>
-<p>The framework can be used under the terms of the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License</a>.
-</p>
-</div>
+<p>The framework can be used under the terms of the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License</a>.</p>
 
-<h2 id="feedback">5. Support and Feedback </h2>
-<div>
+
+<h2 id="feedback">6. Support and Feedback </h2>
+
 <p>For questions and feedback please use the <a href="http://groups.google.com/group/ldif?hl=en">LDIF Google Group</a>.</p>
-</div>
 
 
-<!--h2 id="references">6. References</h2-->
+<!--h2 id="references">7. References</h2-->
 
-<h2 id="acknowledgments">6. Acknowledgments </h2>
-<div>
+<h2 id="acknowledgments">7. Acknowledgments </h2>
+
 <p>This work was supported by the EU FP7 grant <a href="http://lod2.eu/">LOD2 - Creating Knowledge out of Interlinked Data</a> (Grant No. 257943).</p>
 <!--p>WooFunction icon set licensed under <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.</p-->
-</div>
 
 </div>
+
 </div>
 
 </body>
